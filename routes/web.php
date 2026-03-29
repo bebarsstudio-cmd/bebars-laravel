@@ -76,7 +76,9 @@ Route::middleware(['auth', 'admin'])
         // User Management
         Route::resource('admins', AdminController::class)->except(['show']);
         Route::post('admins/{admin}/reset-password', [AdminController::class, 'resetPassword'])->name('admins.reset-password');
-        
+        // Add these routes if not already present
+Route::post('/vote/{user}', [HomeController::class, 'vote'])->name('vote');
+Route::get('/votes', [HomeController::class, 'getVotes'])->name('votes.get');
         // Feedback Management
         Route::get('feedback', [AdminFeedbackController::class, 'index'])->name('feedback.index');
         Route::delete('feedback/{feedback}', [AdminFeedbackController::class, 'destroy'])->name('feedback.destroy');

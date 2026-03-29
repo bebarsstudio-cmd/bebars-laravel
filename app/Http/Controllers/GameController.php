@@ -2,50 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\GameScore;
+use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
-    /**
-     * Display the Boba game page.
-     */
     public function boba()
     {
-        return view('boba');
+        $leaderboard = GameScore::getLeaderboard(10);
+        return view('boba', compact('leaderboard'));
     }
 
-    /**
-     * Save game score.
-     */
     public function saveScore(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:100',
+            'player_name' => 'required|string|max:100',
             'score' => 'required|integer|min:0',
+            'duration' => 'nullable|integer',
         ]);
 
         $score = GameScore::create([
-            'name' => $request->name,
+            'player_name' => $request->player_name,
             'score' => $request->score,
             'game_type' => 'boba',
             'ip_address' => $request->ip(),
+            'duration' => $request->duration,
         ]);
+
+        $leaderboard = GameScore::getLeaderboard(10);
 
         return response()->json([
             'success' => true,
             'message' => 'Score saved successfully!',
-            'score' => $score
+            'score' => $score,
+            'leaderboard' => $leaderboard
         ]);
     }
 
-    /**
-     * Get leaderboard.
-     */
     public function getLeaderboard()
     {
-        $scores = GameScore::getLeaderboard(10);
-        
-        return response()->json($scores);
+        $leaderboard = GameScore::getLeaderboard(10);
+        return response()->json($leaderboard);
     }
 }

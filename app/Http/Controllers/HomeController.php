@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\News;
 use App\Models\Project;
-use App\Models\Like;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -12,8 +12,17 @@ class HomeController extends Controller
     {
         $news = News::latest()->take(6)->get();
         $projects = Project::orderBy('order')->get();
-        $votes = Like::getVotes();
         
-        return view('home', compact('news', 'projects', 'votes'));
+        return view('home', compact('news', 'projects'));
+    }
+
+    public function vote(Request $request, $user)
+    {
+        return response()->json(['success' => false, 'message' => 'Coming soon!']);
+    }
+
+    public function getVotes()
+    {
+        return response()->json(['bebars' => 0, 'ahmed' => 0]);
     }
 }

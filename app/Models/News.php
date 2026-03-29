@@ -13,14 +13,4 @@ class News extends Model
     protected $casts = [
         'date' => 'date',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function scopeRecent($query)
-    {
-        return $query->orderBy('date', 'desc');
-    }
 }
